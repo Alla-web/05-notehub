@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useDebounceCallback } from "usehooks-ts";
 
 import css from "./App.module.css";
 
@@ -10,6 +9,7 @@ import NoteList from "../NoteList/NoteList";
 import Pagination from "../Pagination/Pagination";
 import Modal from "../Modal/Modal";
 import NoteForm from "../NoteForm/NoteForm";
+import SearchBox from "../SearchBox/SearchBox";
 
 export default function App() {
   const [page, setPage] = useState(1);
@@ -21,23 +21,10 @@ export default function App() {
     queryFn: () => fetchNotes(page, search),
   });
 
-  const debauncedSearchChange = useDebounceCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setSearch(event.target.value);
-    },
-    1000
-  );
-
   return (
     <div className={css.app}>
       <header className={css.toolbar}>
-        <input
-          defaultValue={search}
-          onChange={debauncedSearchChange}
-          className={css.input}
-          type="text"
-          placeholder="Search notes"
-        />
+        <SearchBox search={search} setSearch={setSearch} />
 
         {data?.notes?.length && (
           <Pagination
