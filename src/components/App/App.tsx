@@ -20,12 +20,11 @@ export default function App() {
   const [search, setSearch] = useState("");
   const [debauncedSearch] = useDebounceValue(search, 1000);
 
-  const { data, isLoading, isFetching, isError, error } =
-    useQuery<FetchNotesResponse>({
-      queryKey: ["notes", page, debauncedSearch],
-      queryFn: () => fetchNotes(page, debauncedSearch),
-      placeholderData: keepPreviousData,
-    });
+  const { data, isLoading, isError, error } = useQuery<FetchNotesResponse>({
+    queryKey: ["notes", page, debauncedSearch],
+    queryFn: () => fetchNotes(page, debauncedSearch),
+    placeholderData: keepPreviousData,
+  });
 
   return (
     <div className={css.app}>
