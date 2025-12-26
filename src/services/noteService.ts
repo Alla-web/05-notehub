@@ -4,13 +4,13 @@ import type { Note, FetchNotesResponse, CreateNote } from "../types/note";
 axios.defaults.baseURL = "https://notehub-public.goit.study/api";
 const TOKEN = import.meta.env.VITE_NOTEHUB_TOKEN;
 
-export async function fetchNotes(page: number, searhQuery: string) {
+export async function fetchNotes(page: number, searchQuery: string) {
   const response = await axios.get<FetchNotesResponse>("/notes", {
     params: {
       page,
       perPage: 12,
       sortBy: "created",
-      search: searhQuery,
+      search: searchQuery,
     },
     headers: {
       Authorization: `Bearer ${TOKEN}`,
@@ -21,7 +21,7 @@ export async function fetchNotes(page: number, searhQuery: string) {
 }
 
 export async function createNote(payload: CreateNote): Promise<Note> {
-  const response = await axios.post("/notes", payload, {
+  const response = await axios.post<Note>("/notes", payload, {
     headers: {
       Authorization: `Bearer ${TOKEN}`,
     },
@@ -31,9 +31,11 @@ export async function createNote(payload: CreateNote): Promise<Note> {
 }
 
 export async function deleteNote(noteId: Note["id"]) {
-  await axios.delete(`/notes/${noteId}`, {
+  const response = await axios.delete<Note>(`/notes/${noteId}`, {
     headers: {
       Authorization: `Bearer ${TOKEN}`,
     },
   });
+
+  return response.data;
 }

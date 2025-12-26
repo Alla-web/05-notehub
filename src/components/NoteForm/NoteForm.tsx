@@ -24,13 +24,13 @@ const INITIAL_VALUES: NoteFormValues = {
 
 const NoteFormSchems = Yup.object({
   title: Yup.string()
-    .min(3, "Field name must consist at least 3 characters")
-    .max(50, "Field name shoul be 50 characters maximum")
+    .min(3, "Field title must consist at least 3 characters")
+    .max(50, "Field title shoul be 50 characters maximum")
     .required("Field title is required"),
   content: Yup.string().max(500, "Field name shoul be 500 characters maximum"),
   tag: Yup.string()
-    .oneOf(["", "Todo", "Work", "Personal", "Meeting", "Shopping"])
-    .required("ield tag is required"),
+    .oneOf(["Todo", "Work", "Personal", "Meeting", "Shopping"])
+    .required("Field tag is required"),
 });
 
 export default function NoteForm({
@@ -113,7 +113,7 @@ export default function NoteForm({
             onClick={() => {
               onCancelClick();
             }}
-            type="reset"
+            type="button"
             className={css.cancelButton}
           >
             Cancel

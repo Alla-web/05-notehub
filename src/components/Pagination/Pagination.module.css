@@ -46,3 +46,10 @@
   color: #fff !important;
   font-weight: 500;
 }
+
+/* дізейбл пагінації */
+
+.paginateDisabled {
+  pointer-events: none;
+  opacity: 0.5;
+}

@@ -12,7 +12,7 @@ export default function Pagination({
   page,
   setPage,
 }: PaginationProps) {
-  return (
+  return totalPages > 1 ? (
     <div>
       <ReactPaginate
         pageCount={totalPages}
@@ -26,5 +26,5 @@ export default function Pagination({
         activeClassName={css.active}
       />
     </div>
-  );
+  ) : null;
 }
