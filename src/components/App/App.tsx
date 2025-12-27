@@ -4,7 +4,7 @@ import { useDebounceValue } from "usehooks-ts";
 
 import css from "./App.module.css";
 
-import type { FetchNotesResponse } from "../../types/note";
+import type { FetchNotesResponse } from "../../services/noteService";
 import { fetchNotes } from "../../services/noteService";
 import NoteList from "../NoteList/NoteList";
 import Pagination from "../Pagination/Pagination";
@@ -20,11 +20,13 @@ export default function App() {
   const [search, setSearch] = useState("");
   const [debauncedSearch] = useDebounceValue(search, 1000);
 
-  const { data, isLoading, isError, error } = useQuery<FetchNotesResponse>({
-    queryKey: ["notes", page, debauncedSearch],
-    queryFn: () => fetchNotes(page, debauncedSearch),
-    placeholderData: keepPreviousData,
-  });
+  const { data, isLoading, isError, error, isRefetching } =
+    useQuery<FetchNotesResponse>({
+      queryKey: ["notes", page, debauncedSearch],
+      queryFn: () => fetchNotes(page, debauncedSearch),
+      placeholderData: keepPreviousData,
+      staleTime: 60 * 1000,
+    });
 
   return (
     <div className={css.app}>
@@ -46,6 +48,11 @@ export default function App() {
       <div>
         {isLoading && <Loader />}
         {data && !isLoading && <NoteList notes={data.notes} />}
+        {isRefetching && !isLoading && (
+          <Modal onClose={() => setIsModalOpen(false)}>
+            <Loader />
+          </Modal>
+        )}
         {isModalOpen && (
           <Modal onClose={() => setIsModalOpen(false)}>
             <NoteForm
